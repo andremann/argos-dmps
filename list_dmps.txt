@@ -1,0 +1,19 @@
+curl 'https://argos.openaire.eu/api/plan/public/query' \
+  -H 'Accept-Language: en-US,en;q=0.9,el-GR;q=0.8,el;q=0.7' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: application/json' \
+  -b '_pk_id.494.3b57=92efb8dbe03d6da1.1757086718.; cookiesConsent=true' \
+  -H 'Origin: https://argos.openaire.eu' \
+  -H 'Pragma: no-cache' \
+  -H 'Referer: https://argos.openaire.eu/api/swagger-ui/index.html' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36' \
+  -H 'accept: */*' \
+  -H 'sec-ch-ua: "Google Chrome";v="147", "Not.A/Brand";v="8", "Chromium";v="147"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Windows"' \
+  -H 'x-tenant: default' \
+  --data-raw $'{\n  "project": {\n    "fields": [\n      "id"]\n  },\n  "metadata": {\n    "countAll": true\n  },\n  "page": {\n    "offset": 0,\n    "size": 1000\n  },\n  "isActive": [\n    1\n  ],\n  "order": {\n    "items": [\n      "-updatedAt"\n    ]\n  },\n  "groupIds": null\n}'
