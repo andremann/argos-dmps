@@ -4,7 +4,7 @@ A Python script to bulk-fetch and download Data Management Plans (DMPs) from [Op
 
 The tool runs in two sequential steps:
 
-1. **Fetch IDs** — queries the public Argos API to collect the IDs of all DMPs (latest versions only) and saves them to a file.
+1. **Fetch IDs** — queries the public Argos API to collect the IDs of all DMPs and saves them to a file.
 2. **Download XMLs** — uses those IDs to download each DMP as an XML export, one file per DMP.
 
 ---
@@ -66,7 +66,7 @@ python fetch_dmps.py
 
 The script will:
 
-1. Query the Argos public API and collect all DMP IDs (latest versions only, paginated)
+1. Query the Argos public API and collect all DMP IDs (paginated)
 2. Save the IDs to `dmp_ids.txt`
 3. Download each DMP as an XML file into the `argos_xml_exports/` folder
 4. Skip any DMP that has already been downloaded (safe to re-run)
@@ -113,7 +113,7 @@ All settings are at the top of the script:
 
 ## Notes
 
-- Only **latest versions** of DMPs are fetched (`versionStatuses: [1]`). Older versions and unfinalized drafts are excluded.
+- To fetch only the **latest versions** of DMPs, uncomment the line (`versionStatuses: [1]`).
 - The script adds a 0.1s delay between downloads to avoid hammering the server.
 - On network errors, the script waits 5 seconds and retries the same DMP automatically.
 - The ID fetch step (Step 1) does **not** require authentication — it uses the public API.
