@@ -4,9 +4,10 @@ import time
 
 # --- CONFIGURATION ---
 QUERY_URL = "https://argos.openaire.eu/api/plan/public/query"
-EXPORT_URL = "https://argos.openaire.eu/api/plan/xml/export-public"
+EXPORT_XML_URL = "https://argos.openaire.eu/api/plan/xml/export-public"
+EXPORT_JSON_URL = "https://argos.openaire.eu/api/file-transformer/export-public-plan"
 IDS_FILE = "dmp_ids.txt"
-OUTPUT_DIR = "argos_xml_exports"
+OUTPUT_DIR = "argos_exports"
 TOKEN_FILE = "token.txt"  # <-- Paste your fresh token here when it expires
 
 PAGE_SIZE = 1000
@@ -42,7 +43,7 @@ def fetch_dmp_ids():
             "metadata": {"countAll": True},
             "page": {"offset": offset, "size": PAGE_SIZE},
             "isActive": [1],
-            # "versionStatuses": [1], # <-- Uncomment if you want to filter by version status (e.g., only the last version of each DMP) 
+            # "versionStatuses": [1],
             "order": {"items": ["-updatedAt"]},
             "groupIds": None,
         }
@@ -74,11 +75,10 @@ def save_ids(ids, filepath):
 
 
 # ─────────────────────────────────────────────
-# STEP 2 — Download XML exports
+# STEP 2 — Download XML + JSON exports
 # ─────────────────────────────────────────────
 
 def read_token_from_file():
-    """Read token from TOKEN_FILE if it exists and is non-empty."""
     if os.path.exists(TOKEN_FILE):
         with open(TOKEN_FILE, "r") as f:
             token = f.read().strip()
@@ -87,18 +87,18 @@ def read_token_from_file():
     return None
 
 
-def get_download_headers(token):
+def get_download_headers(token, content_type="application/xml"):
     clean_token = token.replace("Bearer ", "").strip()
     return {
         "Authorization": f"Bearer {clean_token}",
-        "Accept": "application/xml",
+        "Accept": content_type,
+        "Content-Type": "application/json",
         "x-tenant": "default",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     }
 
 
 def wait_for_token_refresh(dmp_id, status_code):
-    """Pause until the user pastes a new token into TOKEN_FILE."""
     print(f"\n{'='*60}")
     print(f"  AUTH ERROR (HTTP {status_code}) on DMP: {dmp_id}")
     print(f"{'='*60}")
@@ -136,44 +136,85 @@ def download_dmps(dmp_ids):
     session = requests.Session()
 
     print("=" * 60)
-    print(f"STEP 2: Downloading {total} DMP XML exports...")
+    print(f"STEP 2: Downloading {total} DMP XML + JSON exports...")
     print("=" * 60)
 
     i = 0
     while i < total:
         dmp_id = dmp_ids[i]
-        file_path = os.path.join(OUTPUT_DIR, f"{dmp_id}.xml")
+        xml_path = os.path.join(OUTPUT_DIR, f"{dmp_id}.xml")
+        json_path = os.path.join(OUTPUT_DIR, f"{dmp_id}.json")
 
-        if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
-            print(f"[{i+1}/{total}] Skipping (already exists): {dmp_id}")
+        xml_done = os.path.exists(xml_path) and os.path.getsize(xml_path) > 0
+        json_done = os.path.exists(json_path) and os.path.getsize(json_path) > 0
+
+        if xml_done and json_done:
+            print(f"[{i+1}/{total}] Skipping (both exist): {dmp_id}")
             i += 1
             continue
 
-        session.headers.update(get_download_headers(current_token))
+        # ── XML download ──────────────────────────────────────────
+        if not xml_done:
+            session.headers.update(get_download_headers(current_token, "application/xml"))
+            try:
+                response = session.get(f"{EXPORT_XML_URL}/{dmp_id}", timeout=30)
 
-        try:
-            response = session.get(f"{EXPORT_URL}/{dmp_id}", timeout=30)
+                if response.status_code == 200:
+                    with open(xml_path, "wb") as f:
+                        f.write(response.content)
+                    print(f"[{i+1}/{total}] XML downloaded: {dmp_id}")
 
-            if response.status_code == 200:
-                with open(file_path, "wb") as f:
-                    f.write(response.content)
-                print(f"[{i+1}/{total}] Downloaded: {dmp_id}")
-                i += 1
-                time.sleep(0.1)
+                elif response.status_code in [401, 403]:
+                    current_token = wait_for_token_refresh(dmp_id, response.status_code)
+                    session = requests.Session()
+                    continue  # retry same DMP
 
-            elif response.status_code in [401, 403]:
-                current_token = wait_for_token_refresh(dmp_id, response.status_code)
-                session = requests.Session()
-                # Do NOT increment i — retry same DMP with new token
+                else:
+                    print(f"[{i+1}/{total}] XML server error {response.status_code} on {dmp_id}. Skipping XML.")
 
-            else:
-                print(f"[{i+1}/{total}] Server error {response.status_code} on {dmp_id}. Skipping.")
-                i += 1
+            except requests.exceptions.RequestException as e:
+                print(f"\nNetwork error (XML) on {dmp_id}: {e}. Retrying in 5s...")
+                time.sleep(5)
+                continue  # retry same DMP
+        else:
+            print(f"[{i+1}/{total}] XML already exists: {dmp_id}")
 
-        except requests.exceptions.RequestException as e:
-            print(f"\nNetwork error on {dmp_id}: {e}")
-            print("Retrying in 5 seconds...")
-            time.sleep(5)
+        # ── JSON download ─────────────────────────────────────────
+        if not json_done:
+            json_headers = get_download_headers(current_token, "application/json")
+            json_payload = {
+                "id": dmp_id,
+                "repositoryId": "rda-file-transformer",
+                "format": "json",
+            }
+            try:
+                response = session.post(
+                    EXPORT_JSON_URL,
+                    headers=json_headers,
+                    json=json_payload,
+                    timeout=30,
+                )
+
+                if response.status_code == 200:
+                    with open(json_path, "wb") as f:
+                        f.write(response.content)
+                    print(f"[{i+1}/{total}] JSON downloaded: {dmp_id}")
+
+                elif response.status_code in [401, 403]:
+                    current_token = wait_for_token_refresh(dmp_id, response.status_code)
+                    session = requests.Session()
+                    continue  # retry same DMP (both XML skip + JSON retry)
+
+                else:
+                    print(f"[{i+1}/{total}] JSON server error {response.status_code} on {dmp_id}. Skipping JSON.")
+
+            except requests.exceptions.RequestException as e:
+                print(f"\nNetwork error (JSON) on {dmp_id}: {e}. Retrying in 5s...")
+                time.sleep(5)
+                continue  # retry same DMP
+
+        time.sleep(0.1)
+        i += 1
 
     print(f"\nFinished! All files saved to '{OUTPUT_DIR}'.")
 
@@ -183,7 +224,6 @@ def download_dmps(dmp_ids):
 # ─────────────────────────────────────────────
 
 def main():
-    # Step 1: fetch and save IDs
     ids, total = fetch_dmp_ids()
 
     if not ids:
@@ -194,7 +234,6 @@ def main():
     print(f"Total IDs retrieved        : {len(ids)}")
     save_ids(ids, IDS_FILE)
 
-    # Step 2: download XMLs
     download_dmps(ids)
 
 
