@@ -1,0 +1,157 @@
+maDMP Parse Report (schema v1.2)
+======================================================================
+Input directory      : argos_exports
+JSON files found     : 699
+Successfully parsed  : 699
+Skipped (errors)     : 0
+Features extracted   : 138
+
+Feature statistics
+----------------------------------------------------------------------
+Feature                                                   mean  %filled
+----------------------------------------------------------------------
+  dmp_id_present                                          1.000    100.0%
+  dmp_id_type_doi                                         0.549    100.0%
+  dmp_id_type_handle                                      0.000    100.0%
+  dmp_id_type_ark                                         0.000    100.0%
+  dmp_id_type_url                                         0.000    100.0%
+  dmp_id_type_other                                       0.451    100.0%
+  dmp_has_alternate_id                                    0.000    100.0%
+  dmp_n_alternate_ids                                     0.000    100.0%
+  dmp_has_related_id                                      0.000    100.0%
+  dmp_n_related_ids                                       0.000    100.0%
+  language_eng                                            0.924    100.0%
+  language_present                                        1.000    100.0%
+  has_created                                             1.000    100.0%
+  has_modified                                            1.000    100.0%
+  ethical_issues_exist_yes                                0.027    100.0%
+  ethical_issues_exist_filled                             0.153    100.0%
+  ethical_issues_description_present                      0.102    100.0%
+  ethical_issues_description_length                      34.734    100.0%
+  has_ethical_issues_report                               0.011    100.0%
+  plan_title_present                                      1.000    100.0%
+  plan_title_length                                      79.558    100.0%
+  plan_description_present                                0.994    100.0%
+  plan_description_length                                1036.682    100.0%
+  contact_has_name                                        1.000    100.0%
+  contact_has_mbox                                        0.000    100.0%
+  contact_has_id                                          1.000    100.0%
+  contact_id_is_orcid                                     0.000    100.0%
+  contact_id_is_isni                                      0.000    100.0%
+  contact_id_is_openid                                    0.000    100.0%
+  contact_n_ids                                           1.000    100.0%
+  contact_has_affiliation                                 0.000    100.0%
+  contact_affiliation_has_ror                             0.000    100.0%
+  contact_affiliation_has_grid                            0.000    100.0%
+  contact_affiliation_has_isni                            0.000    100.0%
+  n_contributors                                          5.974    100.0%
+  n_contributors_binned                                   2.346    100.0%
+  contributor_has_orcid                                   0.934    100.0%
+  contributor_has_mbox                                    0.011    100.0%
+  contributor_has_affiliation                             0.000    100.0%
+  contributor_role_owner                                  1.000    100.0%
+  contributor_role_researcher                             0.964    100.0%
+  contributor_role_contact                                0.000    100.0%
+  contributor_role_datamanager                            0.000    100.0%
+  contributor_role_steward                                0.024    100.0%
+  contributor_n_distinct_roles                            2.186    100.0%
+  has_cost                                                0.185    100.0%
+  n_cost_items                                            0.823    100.0%
+  cost_has_value                                          0.152    100.0%
+  cost_has_currency                                       0.000    100.0%
+  cost_has_description                                    0.103    100.0%
+  cost_total_value                                       2301.100    100.0%
+  has_project                                             0.934    100.0%
+  project_has_description                                 0.745    100.0%
+  project_has_start                                       0.323    100.0%
+  project_has_end                                         0.323    100.0%
+  project_has_project_id                                  0.000    100.0%
+  has_funding                                             0.934    100.0%
+  has_funder_id                                           0.934    100.0%
+  funder_id_type_fundref                                  0.934    100.0%
+  has_grant_id                                            0.934    100.0%
+  funding_status_planned                                  0.000    100.0%
+  funding_status_applied                                  0.000    100.0%
+  funding_status_granted                                  0.000    100.0%
+  funding_status_rejected                                 0.000    100.0%
+  funding_has_status                                      0.000    100.0%
+  funding_funder_is_ec                                    0.288    100.0%
+  n_datasets                                              2.326    100.0%
+  n_datasets_binned                                       1.428    100.0%
+  dataset_personal_data_yes                               0.037    100.0%
+  dataset_personal_data_filled                            0.159    100.0%
+  dataset_sensitive_data_yes                              0.050    100.0%
+  dataset_sensitive_data_filled                           0.166    100.0%
+  dataset_id_type_doi                                     0.017    100.0%
+  dataset_id_type_handle                                  0.001    100.0%
+  dataset_id_type_ark                                     0.000    100.0%
+  dataset_id_type_url                                     0.010    100.0%
+  dataset_id_type_other                                   0.961    100.0%
+  dataset_has_alternate_id                                0.000    100.0%
+  dataset_has_related_id                                  0.000    100.0%
+  dataset_any_is_reused                                   0.000    100.0%
+  dataset_is_reused_filled                                0.000    100.0%
+  dataset_rights_any_present                              0.000    100.0%
+  dataset_rights_total_length                             0.000    100.0%
+  dataset_has_creator                                     0.000    100.0%
+  dataset_creator_has_orcid                               0.000    100.0%
+  dataset_creator_has_affiliation                         0.000    100.0%
+  dataset_desc_any_present                                0.871    100.0%
+  dataset_desc_total_length                              1213.127    100.0%
+  dataset_title_any_present                               0.981    100.0%
+  dataset_preservation_any_present                        0.114    100.0%
+  dataset_preservation_total_length                      42.419    100.0%
+  dataset_has_dqa                                         0.197    100.0%
+  dataset_has_issued                                      0.000    100.0%
+  dataset_has_keywords                                    0.459    100.0%
+  dataset_n_keywords_total                                3.027    100.0%
+  dataset_has_security_privacy                            0.092    100.0%
+  dataset_has_technical_resource                          0.004    100.0%
+  dataset_tech_resource_has_id                            0.000    100.0%
+  dataset_any_language_set                                0.981    100.0%
+  dataset_all_eng                                         0.953    100.0%
+  dataset_any_type_set                                    0.981    100.0%
+  dataset_has_metadata_standard                           0.193    100.0%
+  dist_any_format_specified                               0.758    100.0%
+  dist_any_bytesize_specified                             0.425    100.0%
+  dist_any_access_specified                               0.167    100.0%
+  dist_access_open                                        0.144    100.0%
+  dist_access_shared                                      0.037    100.0%
+  dist_access_closed                                      0.041    100.0%
+  dist_any_license_specified                              0.066    100.0%
+  dist_license_is_cc                                      0.000    100.0%
+  dist_license_has_embargo                                0.066    100.0%
+  dist_any_access_url                                     0.006    100.0%
+  dist_any_download_url                                   0.000    100.0%
+  dist_any_available_until                                0.351    100.0%
+  dist_any_issued                                         0.000    100.0%
+  dist_any_host                                           0.642    100.0%
+  dist_host_certified                                     0.007    100.0%
+  dist_host_has_geo                                       0.000    100.0%
+  dist_host_has_pid_system                                0.618    100.0%
+  dist_host_versioning_yes                                0.000    100.0%
+  dist_host_versioning_filled                             0.000    100.0%
+  dist_host_has_backup                                    0.003    100.0%
+  dist_host_has_availability                              0.000    100.0%
+  dist_host_has_host_id                                   0.000    100.0%
+  dist_host_cert_iso16363                                 0.003    100.0%
+  dist_host_cert_coretrustseal                            0.004    100.0%
+  dist_host_cert_dsa                                      0.000    100.0%
+  dist_host_cert_iso16919                                 0.000    100.0%
+  dist_host_cert_dini_zertifikat                          0.000    100.0%
+  dist_host_cert_din31644                                 0.000    100.0%
+  dist_host_cert_trac                                     0.000    100.0%
+  dist_host_cert_wds                                      0.000    100.0%
+  dist_host_pid_doi                                       0.578    100.0%
+  dist_host_pid_handle                                    0.021    100.0%
+  dist_host_pid_url                                       0.037    100.0%
+  dist_host_pid_urn                                       0.000    100.0%
+  dist_host_pid_ark                                       0.000    100.0%
+  dist_host_pid_other                                     0.009    100.0%
+
+Tristate field summary (% _yes among filled DMPs)
+----------------------------------------------------------------------
+  ethical_issues_exist_yes                                  19/  107  ( 17.8% of filled)
+  dataset_personal_data_yes                                 26/  111  ( 23.4% of filled)
+  dataset_sensitive_data_yes                                35/  116  ( 30.2% of filled)
+  dist_host_versioning_yes                                   0/    0  (  nan% of filled)
